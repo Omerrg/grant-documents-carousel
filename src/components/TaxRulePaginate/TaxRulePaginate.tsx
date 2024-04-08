@@ -63,7 +63,7 @@ export const TaxRulePaginate: React.FC<TaxRulePaginateProps> = ({
 }) => {
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
   const [expandedIndexes, setExpandedIndexes] = useState<number[]>([]);
-  
+
   const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
   };
@@ -96,7 +96,9 @@ export const TaxRulePaginate: React.FC<TaxRulePaginateProps> = ({
   const isIndeterminate =
     selectedIndexes.length > 0 && selectedIndexes.length < taxRules.length;
   const isAllSelected = selectedIndexes.length === taxRules.length;
-  const currentRule = selectedIndexes.includes(currentIndex) ? taxRules[currentIndex] : taxRules.filter((_, index) => selectedIndexes.includes(index))[0];
+  const currentRule = selectedIndexes.includes(currentIndex)
+    ? taxRules[currentIndex]
+    : taxRules.filter((_, index) => selectedIndexes.includes(index))[0];
 
   return (
     <ClickAwayListener onClickAway={() => setAnchorEl(null)}>
@@ -105,17 +107,14 @@ export const TaxRulePaginate: React.FC<TaxRulePaginateProps> = ({
           <MdChevronLeft />
         </IconButton>
 
-        <StyledClickableDiv
-          aria-describedby={id}
-          onClick={handleClick}
-        >
-          <CountryFlag
-            countryCode={currentRule.countryCode}
-          />
+        <StyledClickableDiv aria-describedby={id} onClick={handleClick}>
+          <CountryFlag countryCode={currentRule.countryCode} />
           <BoldSpan>{currentRule.taxRuleName}</BoldSpan>
-          <SubtleSpan>{`${taxRules.filter((_, index) => selectedIndexes.includes(index)).indexOf(currentRule) + 1}/${
-            selectedIndexes.length
-          }`}</SubtleSpan>
+          <SubtleSpan>{`${
+            taxRules
+              .filter((_, index) => selectedIndexes.includes(index))
+              .indexOf(currentRule) + 1
+          }/${selectedIndexes.length}`}</SubtleSpan>
         </StyledClickableDiv>
 
         <Popper

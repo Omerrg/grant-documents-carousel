@@ -9,10 +9,10 @@ export const GrantBrowser: React.FC = () => {
     const taxRules: TaxRuleHolders[] = [];
     mockGrants.forEach((grant) => {
       grant.taxRules.forEach((taxRule) => {
-        const existingTaxRule = taxRules.find((rule) => rule.taxRuleName === taxRule.taxRuleName)
-        if (
-          !existingTaxRule
-        ) {
+        const existingTaxRule = taxRules.find(
+          (rule) => rule.taxRuleName === taxRule.taxRuleName
+        );
+        if (!existingTaxRule) {
           taxRules.push({
             taxRuleName: taxRule.taxRuleName,
             countryCode: taxRule.countryCode,

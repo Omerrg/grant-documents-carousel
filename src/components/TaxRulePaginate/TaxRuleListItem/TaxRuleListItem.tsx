@@ -51,14 +51,29 @@ export const TaxRuleListItem: React.FC<TaxRuleListItemProps> = ({
           onChange={onToggleSelect}
           onClick={(e) => e.stopPropagation()}
         />
-         <ListItemText
+        <ListItemText
           primary={
-            <div style={{ display: 'flex', alignItems: 'center', overflow: 'hidden' }}>
-              <CountryFlag countryCode={taxRule.countryCode}/>
-              <div style={{ flex: 1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                overflow: "hidden",
+              }}
+            >
+              <CountryFlag countryCode={taxRule.countryCode} />
+              <div
+                style={{
+                  flex: 1,
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
                 {taxRule.taxRuleName}
               </div>
-              <span style={{ marginLeft: 'auto', color: grey[600], paddingLeft: 8 }}>
+              <span
+                style={{ marginLeft: "auto", color: grey[600], paddingLeft: 8 }}
+              >
                 ({taxRule.holders.length} Grants)
               </span>
             </div>
@@ -76,9 +91,11 @@ export const TaxRuleListItem: React.FC<TaxRuleListItemProps> = ({
       </TaxRuleListItemContainer>
       <Collapse in={isExpanded && isSelected} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          {taxRule.holders.map(holder => (<ListItem sx={{ pl: 4 }}>
-            <ListItemText primary={holder} />
-          </ListItem>))}
+          {taxRule.holders.map((holder) => (
+            <ListItem sx={{ pl: 4 }}>
+              <ListItemText primary={holder} />
+            </ListItem>
+          ))}
         </List>
       </Collapse>
     </>

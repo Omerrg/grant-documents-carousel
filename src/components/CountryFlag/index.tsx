@@ -1,3 +1,3 @@
 import { CountryFlag } from "./CountryFlag";
 
-export default CountryFlag
+export default CountryFlag;

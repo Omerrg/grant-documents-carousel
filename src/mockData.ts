@@ -15,6 +15,7 @@ export const mockGrants: GrantObject[] = [
     stakeholderName: "Omer Regev",
     taxRules: [
       { countryCode: 1, taxRuleName: "United States - NSO (Non-Resident)" },
+      { countryCode: 2, taxRuleName: "Israel - 102 Capital Gains" }
     ],
   },
 ];

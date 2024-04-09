@@ -2,7 +2,8 @@ import React, { useMemo } from "react";
 import { mockGrants } from "@/mockData";
 import { usePagination } from "@/hooks/usePagination";
 import TaxRulePaginate from "@/components/TaxRulePaginate";
-import { TaxRuleHolders } from "@/types";
+import { StakeholderWithTaxRule, TaxRuleHolders } from "@/types";
+import { useSelection } from "@/hooks/useSelection";
 
 export const GrantBrowser: React.FC = () => {
   const availableTaxRules = useMemo(() => {
@@ -26,25 +27,38 @@ export const GrantBrowser: React.FC = () => {
 
     return taxRules;
   }, [mockGrants]);
-  const {
-    goToNext,
-    goToPrevious,
-    currentIndex,
-    selectIndex,
-    selectAll,
-    selectedIndexes,
-  } = usePagination(availableTaxRules);
 
+  const { selectedIndexes, selectIndex, toggleSelectAll } = useSelection(
+    availableTaxRules.length
+  );
+
+  const combinedStakeholdersWithTaxRules: StakeholderWithTaxRule[] =
+    useMemo(() => {
+      return availableTaxRules
+        .filter((_, index) => selectedIndexes.includes(index))
+        .flatMap((rule) =>
+          rule.holders.map((holder) => ({ holder, taxRule: rule }))
+        );
+    }, [availableTaxRules, selectedIndexes]);
+  
+  const { currentIndex, goToNext, goToPrevious } = usePagination(
+    combinedStakeholdersWithTaxRules
+  );
+
+  const currentStakeholderWithTaxRule =
+    combinedStakeholdersWithTaxRules[currentIndex];
   return (
     <div>
       <TaxRulePaginate
-        currentIndex={currentIndex}
         taxRules={availableTaxRules}
-        selectedIndexes={selectedIndexes}
         selectIndex={selectIndex}
-        selectAll={selectAll}
-        onNext={goToNext}
-        onPrevious={goToPrevious}
+        onToggleSelectAll={() => toggleSelectAll()}
+        gotoNext={goToNext}
+        gotoPrevious={goToPrevious}
+        currentStakeholderWithTaxRule={currentStakeholderWithTaxRule}
+        selectedIndexes={selectedIndexes}
+        currentIndex={currentIndex}
+        maxIndex={combinedStakeholdersWithTaxRules.length}
       />
     </div>
   );

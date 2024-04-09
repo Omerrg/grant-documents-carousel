@@ -13,3 +13,8 @@ export interface TaxRuleHolders {
   taxRuleName: string;
   holders: string[];
 }
+
+export interface StakeholderWithTaxRule {
+  holder: string;
+  taxRule: TaxRuleHolders;
+}

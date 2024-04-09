@@ -1,10 +1,6 @@
 import React from "react";
 import ReactCountryFlag from "react-country-flag";
-
-interface CountryFlagProps {
-  countryCode: number;
-  className?: string;
-}
+import { CountryFlagProps } from "./CountryFlag.dto";
 
 const countryCodeMap: { [key: number]: string } = {
   1: "us",

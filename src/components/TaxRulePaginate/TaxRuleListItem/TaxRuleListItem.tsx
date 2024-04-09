@@ -3,24 +3,15 @@ import {
   ListItemButton,
   Checkbox,
   ListItemText,
-  IconButton,
   Collapse,
   List,
   ListItem,
 } from "@mui/material";
-import { MdExpandMore, MdExpandLess } from "react-icons/md";
-import CountryFlag from "@/components/CountryFlag"; // Ensure this is correctly imported
-import { TaxRuleHolders } from "@/types";
+import CountryFlag from "@/components/CountryFlag";
 import { grey } from "@mui/material/colors";
 import { styled } from "@mui/material/styles";
-
-interface TaxRuleListItemProps {
-  taxRule: TaxRuleHolders;
-  isSelected: boolean;
-  isExpanded: boolean;
-  onToggleSelect: () => void;
-  onToggleExpand: () => void;
-}
+import { TaxRuleListItemProps } from "./TaxRuleListItem.dto";
+import TaxRuleListItemIcon from "./TaxRuleListItemIcon";
 
 const TaxRuleListItemContainer = styled(ListItemButton)(({ theme }) => ({
   "&:hover": {
@@ -28,10 +19,24 @@ const TaxRuleListItemContainer = styled(ListItemButton)(({ theme }) => ({
   },
 }));
 
-const TaxRuleListItemIcon = styled(IconButton)({
-  padding: 0,
-  marginLeft: "auto",
+const PrimaryContentContainer = styled("div")({
+  display: "flex",
+  alignItems: "center",
+  overflow: "hidden",
 });
+
+const TaxRuleNameContainer = styled("div")({
+  flex: 1,
+  whiteSpace: "nowrap",
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+});
+
+const GrantsCountSpan = styled("span")(({ theme }) => ({
+  marginLeft: "auto",
+  color: grey[600],
+  paddingLeft: theme.spacing(1),
+}));
 
 export const TaxRuleListItem: React.FC<TaxRuleListItemProps> = ({
   taxRule,
@@ -53,46 +58,25 @@ export const TaxRuleListItem: React.FC<TaxRuleListItemProps> = ({
         />
         <ListItemText
           primary={
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                overflow: "hidden",
-              }}
-            >
+            <PrimaryContentContainer>
               <CountryFlag countryCode={taxRule.countryCode} />
-              <div
-                style={{
-                  flex: 1,
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                }}
-              >
-                {taxRule.taxRuleName}
-              </div>
-              <span
-                style={{ marginLeft: "auto", color: grey[600], paddingLeft: 8 }}
-              >
+              <TaxRuleNameContainer>{taxRule.taxRuleName}</TaxRuleNameContainer>
+              <GrantsCountSpan>
                 ({taxRule.holders.length} Grants)
-              </span>
-            </div>
+              </GrantsCountSpan>
+            </PrimaryContentContainer>
           }
         />
         <TaxRuleListItemIcon
-          size="small"
-          onClick={(e: React.MouseEvent) => {
-            e.stopPropagation();
-            onToggleExpand();
-          }}
-        >
-          {isExpanded ? <MdExpandLess /> : <MdExpandMore />}
-        </TaxRuleListItemIcon>
+          isExpanded={isExpanded}
+          isSelected={isSelected}
+          onToggleExpand={onToggleExpand}
+        />
       </TaxRuleListItemContainer>
       <Collapse in={isExpanded && isSelected} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
           {taxRule.holders.map((holder) => (
-            <ListItem sx={{ pl: 4 }}>
+            <ListItem key={holder} sx={{ pl: 4 }}>
               <ListItemText primary={holder} />
             </ListItem>
           ))}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import IconButton from "@mui/material/IconButton";
 import Popper from "@mui/material/Popper";
 import List from "@mui/material/List";
@@ -8,22 +8,11 @@ import Checkbox from "@mui/material/Checkbox";
 import Paper from "@mui/material/Paper";
 import ClickAwayListener from "@mui/material/ClickAwayListener";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
-import CountryFlag from "@/components/CountryFlag"; // Ensure this is correctly imported
-import { TaxRuleHolders } from "@/types";
-import { grey } from "@mui/material/colors";
 import Fade from "@mui/material/Fade";
 import { styled } from "@mui/material/styles";
 import TaxRuleListItem from "./TaxRuleListItem";
-
-interface TaxRulePaginateProps {
-  currentIndex: number;
-  taxRules: TaxRuleHolders[];
-  onNext: () => void;
-  onPrevious: () => void;
-  selectedIndexes: number[];
-  selectIndex: (index: number) => void;
-  selectAll: (selectAll: boolean) => void;
-}
+import { TaxRulePaginateProps } from "./TaxRulePaginate.dto";
+import StakeholderDisplay from "./StakeholderDisplay";
 
 const PopperPaper = styled(Paper)({
   maxWidth: "300px",
@@ -43,29 +32,23 @@ const StyledClickableDiv = styled("div")({
   cursor: "pointer",
 });
 
-const BoldSpan = styled("span")({
-  fontWeight: "bold",
-});
-
-const SubtleSpan = styled("span")({
-  margin: "0 8px",
-  color: grey[600],
-});
-
 export const TaxRulePaginate: React.FC<TaxRulePaginateProps> = ({
-  currentIndex,
   taxRules,
-  onNext,
-  onPrevious,
-  selectedIndexes,
   selectIndex,
-  selectAll,
+  onToggleSelectAll,
+  gotoNext,
+  gotoPrevious,
+  currentStakeholderWithTaxRule,
+  selectedIndexes,
+  currentIndex,
+  maxIndex,
 }) => {
-  const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
+  const anchorRef = useRef<HTMLDivElement>(null);
+  const [open, setOpen] = useState(false);
   const [expandedIndexes, setExpandedIndexes] = useState<number[]>([]);
 
-  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    setAnchorEl(anchorEl ? null : event.currentTarget);
+  const handleClick = () => {
+    setOpen((currentOpen) => !currentOpen);
   };
 
   const handleToggleSelect = (index: number) => {
@@ -87,40 +70,38 @@ export const TaxRulePaginate: React.FC<TaxRulePaginateProps> = ({
   };
 
   const handleSelectAllClick = () => {
-    selectAll(selectedIndexes.length !== taxRules.length);
+    onToggleSelectAll();
   };
 
-  const open = Boolean(anchorEl);
   const id = open ? "tax-rule-popper" : undefined;
 
   const isIndeterminate =
     selectedIndexes.length > 0 && selectedIndexes.length < taxRules.length;
   const isAllSelected = selectedIndexes.length === taxRules.length;
-  const currentRule = selectedIndexes.includes(currentIndex)
-    ? taxRules[currentIndex]
-    : taxRules.filter((_, index) => selectedIndexes.includes(index))[0];
 
   return (
-    <ClickAwayListener onClickAway={() => setAnchorEl(null)}>
+    <ClickAwayListener onClickAway={() => setOpen(false)}>
       <CenteredDiv>
-        <IconButton onClick={onPrevious} disabled={currentIndex === 0}>
+        <IconButton onClick={gotoPrevious} disabled={currentIndex === 0}>
           <MdChevronLeft />
         </IconButton>
 
-        <StyledClickableDiv aria-describedby={id} onClick={handleClick}>
-          <CountryFlag countryCode={currentRule.countryCode} />
-          <BoldSpan>{currentRule.taxRuleName}</BoldSpan>
-          <SubtleSpan>{`${
-            taxRules
-              .filter((_, index) => selectedIndexes.includes(index))
-              .indexOf(currentRule) + 1
-          }/${selectedIndexes.length}`}</SubtleSpan>
+        <StyledClickableDiv
+          ref={anchorRef}
+          aria-describedby={id}
+          onClick={handleClick}
+        >
+          <StakeholderDisplay
+            currentStakeholderWithTaxRule={currentStakeholderWithTaxRule}
+            currentIndex={currentIndex}
+            maxIndex={maxIndex}
+          />
         </StyledClickableDiv>
 
         <Popper
           id={id}
           open={open}
-          anchorEl={anchorEl}
+          anchorEl={anchorRef.current}
           placement="bottom"
           transition
         >
@@ -144,7 +125,7 @@ export const TaxRulePaginate: React.FC<TaxRulePaginateProps> = ({
                   </ListItemButton>
                   {taxRules.map((taxRule, index) => (
                     <TaxRuleListItem
-                      key={taxRule.taxRuleName} // Ensure stakeholder names are unique
+                      key={taxRule.taxRuleName}
                       taxRule={taxRule}
                       isSelected={selectedIndexes.includes(index)}
                       isExpanded={expandedIndexes.includes(index)}
@@ -158,10 +139,7 @@ export const TaxRulePaginate: React.FC<TaxRulePaginateProps> = ({
           )}
         </Popper>
 
-        <IconButton
-          onClick={onNext}
-          disabled={currentIndex === selectedIndexes.length - 1}
-        >
+        <IconButton onClick={gotoNext} disabled={currentIndex === maxIndex - 1}>
           <MdChevronRight />
         </IconButton>
       </CenteredDiv>

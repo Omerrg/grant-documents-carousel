@@ -5,7 +5,6 @@ import {
   ListItemText,
   Collapse,
   List,
-  ListItem,
 } from "@mui/material";
 import CountryFlag from "@/components/CountryFlag";
 import { grey } from "@mui/material/colors";
@@ -76,9 +75,9 @@ export const TaxRuleListItem: React.FC<TaxRuleListItemProps> = ({
       <Collapse in={isExpanded && isSelected} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
           {taxRule.holders.map((holder) => (
-            <ListItem key={holder} sx={{ pl: 4 }}>
+            <ListItemButton key={holder}>
               <ListItemText primary={holder} />
-            </ListItem>
+            </ListItemButton>
           ))}
         </List>
       </Collapse>

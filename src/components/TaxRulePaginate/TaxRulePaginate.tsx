@@ -13,6 +13,7 @@ import { styled } from "@mui/material/styles";
 import TaxRuleListItem from "./TaxRuleListItem";
 import { TaxRulePaginateProps } from "./TaxRulePaginate.dto";
 import StakeholderDisplay from "./StakeholderDisplay";
+import { Divider } from "@mui/material";
 
 const PopperPaper = styled(Paper)({
   maxWidth: "300px",
@@ -24,6 +25,9 @@ const CenteredDiv = styled("div")({
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
+  "& > button:focus": {
+    outline: "none",
+  },
 });
 
 const StyledClickableDiv = styled("div")({
@@ -82,7 +86,11 @@ export const TaxRulePaginate: React.FC<TaxRulePaginateProps> = ({
   return (
     <ClickAwayListener onClickAway={() => setOpen(false)}>
       <CenteredDiv>
-        <IconButton onClick={gotoPrevious} disabled={currentIndex === 0}>
+        <IconButton
+          onClick={gotoPrevious}
+          disabled={currentIndex === 0}
+          disableRipple
+        >
           <MdChevronLeft />
         </IconButton>
 
@@ -104,6 +112,14 @@ export const TaxRulePaginate: React.FC<TaxRulePaginateProps> = ({
           anchorEl={anchorRef.current}
           placement="bottom"
           transition
+          modifiers={[
+            {
+              name: "offset",
+              options: {
+                offset: [0, 10],
+              },
+            },
+          ]}
         >
           {({ TransitionProps }) => (
             <Fade {...TransitionProps} timeout={350}>
@@ -124,6 +140,8 @@ export const TaxRulePaginate: React.FC<TaxRulePaginateProps> = ({
                     <ListItemText primary="Select All" />
                   </ListItemButton>
                   {taxRules.map((taxRule, index) => (
+                    <>
+                    <Divider />
                     <TaxRuleListItem
                       key={taxRule.taxRuleName}
                       taxRule={taxRule}
@@ -132,6 +150,7 @@ export const TaxRulePaginate: React.FC<TaxRulePaginateProps> = ({
                       onToggleSelect={() => handleToggleSelect(index)}
                       onToggleExpand={() => handleToggleExpand(index)}
                     />
+                    </>
                   ))}
                 </List>
               </PopperPaper>
@@ -139,7 +158,12 @@ export const TaxRulePaginate: React.FC<TaxRulePaginateProps> = ({
           )}
         </Popper>
 
-        <IconButton onClick={gotoNext} disabled={currentIndex === maxIndex - 1}>
+        <IconButton
+          onClick={gotoNext}
+          disableRipple
+          disableFocusRipple
+          disabled={currentIndex === maxIndex - 1}
+        >
           <MdChevronRight />
         </IconButton>
       </CenteredDiv>

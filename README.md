@@ -1,29 +1,61 @@
-# React + TypeScript + Vite
+# Carousel Component for Slice Company
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Overview
 
-Currently, two official plugins are available:
+This project implements a Carousel Component designed for Slice Company, which specializes in managing equity grants for employees globally, in compliance with local tax regulations. The Carousel Component is a pivotal part of a larger system aimed at showcasing grant documents for various stakeholders.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Key Features
 
-## Expanding the ESLint configuration
+- **Navigation Functionality**: Users can navigate through different grant documents efficiently.
+- **Filtering by Tax Rules**: The component allows filtering of grants according to the tax rules applicable in different countries.
+- **Display Information**: It displays the count of grants under each set of tax rules, alongside the stakeholders associated with those grants.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Getting Started
 
-- Configure the top-level `parserOptions` property like this:
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. 
 
-```js
-export default {
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+### Prerequisites
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+- Node.js and npm (Node Package Manager) installed on your computer.
+
+### Installation
+
+1. Clone the repository to your local machine:
+
+    ```
+    git clone https://github.com/Omerrg/grant-documents-carousel.git
+    ```
+
+2. Navigate to the project directory:
+
+    ```
+    cd grant-documents-carousel
+    ```
+
+3. Install the necessary packages:
+
+    ```
+    npm install
+    ```
+
+### Running the Project
+
+- To start the development server:
+
+    ```
+    npm start
+    ```
+
+    This script runs the command `npm run dev`, which starts the Vite development server.
+
+- To run the project in production mode:
+
+    ```
+    npm run start:prod
+    ```
+
+    This script first builds the project by running `npm run build` and then previews the production build with `npm run preview`.
+
+## Usage
+
+The Carousel Component can be navigated using the arrows for moving through documents. Filters can be applied to sort documents based on the tax rules of different countries. Information regarding the number of grants and relevant stakeholders is displayed prominently.

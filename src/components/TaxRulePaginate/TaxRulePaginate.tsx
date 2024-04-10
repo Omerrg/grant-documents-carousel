@@ -89,7 +89,6 @@ export const TaxRulePaginate: React.FC<TaxRulePaginateProps> = ({
         <IconButton
           onClick={gotoPrevious}
           disabled={currentIndex === 0}
-          disableRipple
         >
           <MdChevronLeft />
         </IconButton>
